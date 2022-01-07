@@ -90,21 +90,29 @@ export class KmeansWekaComponent implements OnInit {
           // allowOutsideClick: false
     });
     Swal.showLoading();
-    // let column_1 = this.form.get('column_1')?.value;
-    // let column_2 = this.form.get('column_2')?.value;
-    // let columns= [];
-    // columns.push(column_1, column_2);
-    // this.form.controls["columns"].setValue(columns);
-    this.machineLearningService.runKmeans(this.form.value).subscribe((result: any)=>{
+     //let column_1 = this.form.get('column_1')?.value;
+     //let column_2 = this.form.get('column_2')?.value;
+     //let columns= [];
+     //columns.push(column_1, column_2);
+     //this.form.controls["columns"].setValue(columns);
+    
+     this.machineLearningService.runKmeans(this.form.value).subscribe((result: any)=>{
       Swal.close();
       this.showResults = true;
       this.response = result;
       
-      //this.data = result?.data.data;
-      //this.columns = result?.columns.filter((item:any) => item !== "cluster");
+      
+      //Si quiero obtener los datos ordenados de data y ordenarlos por cluster debo descomentar
+      //los siguientes dos lineas de codigo y comentar la linea "this.data = result?.data.data;"
+      //let data_no_sorted= result?.data.data;
+      //this.data=data_no_sorted.sort((a:any,b:any)=> a?.cluster-b?.cluster);
+      this.data = result?.data.data;
+      this.columns = result?.columns.filter((item:any) => item !== "cluster");
       let no_sorted_clusters = result?.clusters;
       this.clusters = no_sorted_clusters.sort((a:any, b:any) => b?.percentage-a?.percentage);
       //this.centroids_idx = result?.centroids.map((val:any) => val.position );
+      this.centroids_idx=result?.clusters.map((val:any)=>val.cluster)
+      
       //this.img = 'data:image/jpg;base64,'
       //           + this.response?.graphic;
       //this.img_elbow = 'data:image/jpg;base64,'
